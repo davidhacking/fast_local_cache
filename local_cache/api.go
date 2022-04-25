@@ -11,7 +11,7 @@ type FastLocalCaching interface {
 	BatchPut(values map[interface{}]interface{}) error
 	BatchDel(keys []interface{}) error
 	Merge() error
-	Init(Path string, opts ...Option) error
+	Init(path string, opts ...Option) error
 }
 
 type Caching interface {
@@ -30,6 +30,11 @@ type KVCodec interface {
 	Decode(data []byte) (interface{}, error)
 }
 
+type FileIO interface {
+	BuildReader(path string) (io.Reader, error)
+	BuildWriter(path string) (io.Writer, error)
+}
+
 type DataFileReader interface {
 	ReadDataFile(reader io.Reader) (*DataFile, error)
 }
@@ -39,5 +44,5 @@ type DataFileWriter interface {
 }
 
 type Monitor interface {
-	Mon(name string, n ...int)
+	Inc(name string, n ...int)
 }

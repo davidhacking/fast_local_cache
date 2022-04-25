@@ -1,5 +1,10 @@
 package local_cache
 
+const (
+	datafileSuffix = ".data"
+	datafileMatch  = "*.data"
+)
+
 type Version uint64
 
 var (

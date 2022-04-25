@@ -3,17 +3,28 @@ package local_cache
 import "time"
 
 type Config struct {
-	confFile      string
-	caching       Caching
-	keyCodec      KVCodec
-	valueCodec    KVCodec
-	entryCodec    EntryCodec
-	mergeDuration time.Duration
-	mergeFileNum  int
+	confFile        string
+	caching         Caching
+	keyCodec        KVCodec
+	valueCodec      KVCodec
+	entryCodec      EntryCodec
+	monitor         Monitor
+	dataFileReader  DataFileReader
+	dataFileWriter  DataFileWriter
+	mergeDuration   time.Duration
+	mergeFileNum    int
+	fileIO          FileIO
+	skipBrokenEntry bool
+}
+
+func DefaultConfig() *Config {
+	return &Config{
+		caching: NewBigCaching(),
+	}
 }
 
 // Option is a function that takes a config struct and modifies it
-type Option func(*Config) error
+type Option func(cfg *Config) error
 
 func WithCache(caching Caching) Option {
 	return func(cfg *Config) error {
@@ -50,9 +61,37 @@ func WithMergeDuration(mergeDuration time.Duration) Option {
 	}
 }
 
-func WithMergeFileNum(mergeFileNum int) Option {
+func WithMonitor(monitor Monitor) Option {
 	return func(cfg *Config) error {
-		cfg.mergeFileNum = mergeFileNum
+		cfg.monitor = monitor
+		return nil
+	}
+}
+
+func WithDataFileReader(dataFileReader DataFileReader) Option {
+	return func(cfg *Config) error {
+		cfg.dataFileReader = dataFileReader
+		return nil
+	}
+}
+
+func WithDataFileWriter(dataFileWriter DataFileWriter) Option {
+	return func(cfg *Config) error {
+		cfg.dataFileWriter = dataFileWriter
+		return nil
+	}
+}
+
+func WithFileIO(fileIO FileIO) Option {
+	return func(cfg *Config) error {
+		cfg.fileIO = fileIO
+		return nil
+	}
+}
+
+func WithSkipBrokenEntry(skipBrokenEntry bool) Option {
+	return func(cfg *Config) error {
+		cfg.skipBrokenEntry = skipBrokenEntry
 		return nil
 	}
 }

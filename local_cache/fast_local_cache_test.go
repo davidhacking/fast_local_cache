@@ -6,7 +6,7 @@ import (
 )
 
 func TestFastLocalCache(t *testing.T) {
-	var db FastLocalCaching = NewFastLocalCache()
+	var db FastLocalCaching = New()
 	err := db.Init("./db")
 	assert.Nil(t, err)
 }

@@ -1,8 +1,8 @@
 package local_cache
 
-type DataFile struct {
-	metaInfo *MetaInfo
-	entries  []*Entries
+type DataFiles struct {
+	metaInfo  *MetaInfo
+	datafiles []string
 }
 
 type MetaInfo struct {
@@ -12,8 +12,9 @@ type MetaInfo struct {
 	size     Size
 }
 
-type Entries struct {
+type DataFile struct {
 	version Version
 	size    Size
+	path    string // <big ver>.<small ver>.data
 	entries []*Entry
 }
